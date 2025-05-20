@@ -10,42 +10,42 @@ import ( // လိုအပ်တဲ့ package တွေကို import လု
 	"time"          // time related functions တွေအတွက်
 )
 
-const version = "1.0.0"  // application version
-const cssVersion = "1"   // CSS version
+const version = "1.0.0" // application version
+const cssVersion = "1"  // CSS version
 
-type config struct {  // configuration အတွက် struct ဖွဲ့ထားတာပါ
-	port int    // server port number
-	env  string // environment (development/production)
-	api  string // API URL
-	db   struct {  // database configuration
-		dsn string  // database connection string
+type config struct { // configuration အတွက် struct ဖွဲ့ထားတာပါ
+	port int      // server port number
+	env  string   // environment (development/production)
+	api  string   // API URL
+	db   struct { // database configuration
+		dsn string // database connection string
 	}
-	stripe struct {  // Stripe payment configuration
-		secrect string  // Stripe secret key
-		key     string  // Stripe public key
+	stripe struct { // Stripe payment configuration
+		secrect string // Stripe secret key
+		key     string // Stripe public key
 	}
 }
 
-type application struct {  // main application struct
-	config        config  // configuration
-	infoLog       *log.Logger  // information logger
-	errorLog      *log.Logger  // error logger
-	templateCache map[string]*template.Template  // HTML templates cache
-	version       string  // application version
+type application struct { // main application struct
+	config        config                        // configuration
+	infoLog       *log.Logger                   // information logger
+	errorLog      *log.Logger                   // error logger
+	templateCache map[string]*template.Template // HTML templates cache
+	version       string                        // application version
 }
 
-func (app *application) serve() error {  // HTTP server ကို start လုပ်တဲ့ function
-	srv := &http.Server{  // HTTP server configuration
-		Addr: fmt.Sprintf(":%d",app.config.port),  // server port
-		Handler:app.routes(),  // route handler
-		IdleTimeout:30 * time.Second,  // connection idle timeout
-		ReadTimeout:10 * time.Second,  // read timeout
-		ReadHeaderTimeout: 5 *time.Second,  // header read timeout
-		WriteTimeout: 5 *time.Second,  // write timeout
+func (app *application) serve() error { // HTTP server ကို start လုပ်တဲ့ function
+	srv := &http.Server{ // HTTP server configuration
+		Addr:              fmt.Sprintf(":%d", app.config.port), // server port
+		Handler:           app.routes(),                        // route handler
+		IdleTimeout:       30 * time.Second,                    // connection idle timeout
+		ReadTimeout:       10 * time.Second,                    // read timeout
+		ReadHeaderTimeout: 5 * time.Second,                     // header read timeout
+		WriteTimeout:      5 * time.Second,                     // write timeout
 	}
-	app.infoLog.Println(fmt.Sprintf("Starting HTTP server in %s mode on port %d", app.config.env, app.config.port))
+	app.infoLog.Printf(fmt.Sprintf("Starting HTTP server in %s mode on port %d", app.config.env, app.config.port))
 
-	return srv.ListenAndServe()  // server ကို start လုပ်ပါ
+	return srv.ListenAndServe() // server ကို start လုပ်ပါ
 }
 
 func main() { // main function
