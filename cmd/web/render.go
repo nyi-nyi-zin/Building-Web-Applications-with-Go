@@ -64,6 +64,7 @@ func (app *application) renderTemplate(w http.ResponseWriter, r *http.Request, p
 	return nil
 }
 
+//Done Noted!1
 // template file တွေကို parse လုပ်တာ
 func (app *application) parseTemplate(partials []string, page, templateToRender string) (*template.Template, error) {
 	var t *template.Template
@@ -85,7 +86,6 @@ func (app *application) parseTemplate(partials []string, page, templateToRender 
 		app.errorLog.Println(err)
 		return nil, err
 	}
-
 	app.templateCache[templateToRender] = t
 	return t, nil
 }

@@ -1,22 +1,22 @@
-package main // ဒါက main package ဖြစ်ကြောင်း ကြေငြာထားတာပါ
+package main
 
 import ( // လိုအပ်တဲ့ package တွေကို import လုပ်ထားတာပါ
-	"flag"          // command line flags တွေကို handle လုပ်ဖို့
-	"fmt"           // string formatting အတွက်
-	"html/template" // HTML templates တွေကို handle လုပ်ဖို့
-	"log"           // logging အတွက်
-	"net/http"      // HTTP server အတွက်
-	"os"            // operating system functions တွေအတွက်
-	"time"          // time related functions တွေအတွက်
+	"flag"
+	"fmt"
+	"html/template"
+	"log"
+	"net/http"
+	"os"
+	"time"
 )
 
-const version = "1.0.0" // application version
-const cssVersion = "1"  // CSS version
+const version = "1.0.0" 
+const cssVersion = "1"  
 
 type config struct { // configuration အတွက် struct ဖွဲ့ထားတာပါ
-	port int      // server port number
-	env  string   // environment (development/production)
-	api  string   // API URL
+	port int     
+	env  string   
+	api  string   
 	db   struct { // database configuration
 		dsn string // database connection string
 	}
@@ -51,12 +51,12 @@ func (app *application) serve() error { // HTTP server ကို start လုပ
 func main() { // main function
 	var cfg config // configuration variable
 
-	// command line flags တွေကို set လုပ်ထားတာပါ
+	// command line flags တွေကို setup လုပ်ထားတာပါ
 	flag.IntVar(&cfg.port, "port", 4000, "Server port to listen on")
 	flag.StringVar(&cfg.env, "env", "development", "Application environment {development | production}")
 	flag.StringVar(&cfg.api, "api", "http://localhost:4001", "URL to api")
 
-	flag.Parse() // flags တွေကို parse လုပ်ပါ
+	flag.Parse() // flags တွေကို ခေါ်သုံးထားတာ။
 
 	// Stripe keys တွေကို environment variables ကနေ ယူထားတာပါ
 	cfg.stripe.key = os.Getenv("STRIPE_KEY")
@@ -77,7 +77,7 @@ func main() { // main function
 		version:       version,
 	}
 
-	// server ကို start လုပ်ပါ
+	// server ကို start လုပ်တဲ့ function ကိုခေါ်သုံးထားတာ။
 	err := app.serve()
 	if err != nil {
 		app.errorLog.Println(err)
