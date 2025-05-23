@@ -35,6 +35,7 @@ func (c *Card) CreatePaymentIntent(currency string, amount int) (*stripe.Payment
 	// params.AddMetadata("key","value")
 
 	pi,err := paymentintent.New(params)
+	
 	if err != nil {
 		msg := ""
 		if stripeErr,ok := err.(*stripe.Error); ok{
@@ -48,10 +49,22 @@ func (c *Card) CreatePaymentIntent(currency string, amount int) (*stripe.Payment
 func cardErrorMessage(code stripe.ErrorCode) string {
 	var msg = ""
 	switch code {
-	case  stripe.ErrorCodeCardDeclined:
-		 msg = "Your card was declined"
-    case stripe.ErrorCodeExpiredCard:
+	case stripe.ErrorCodeCardDeclined:
+		msg = "Your card was declined"
+	case stripe.ErrorCodeExpiredCard:
 		msg = "Your card is expired"
+	case stripe.ErrorCodeIncorrectCVC:
+		msg = "Incorrect CVC code"
+	case stripe.ErrorCodeIncorrectZip:
+		msg = "Incorrect zip/postal code"
+	case stripe.ErrorCodeAmountTooLarge:
+		msg = "The amount is too large to charge to your card"
+	case stripe.ErrorCodeAmountTooSmall:
+		msg = "The amount is too small to charge to your card"
+	case stripe.ErrorCodeBalanceInsufficient:
+		msg = "Insufficient balance"
+	case stripe.ErrorCodePostalCodeInvalid:
+		msg = "Your postal code is invalid"
 	default:
 		msg = "Your card was declined"
 	}
