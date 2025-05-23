@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"html/template"
 	"log"
 	"net/http"
 	"os"
@@ -12,12 +11,12 @@ import (
 
 
 	const version = "1.0.0"
-	const cssVersion = "1"
+	
 
 	type config struct { 
 		port int
 		env  string
-		api  string
+	
 		db   struct { 
 			dsn string 
 		}
@@ -31,7 +30,6 @@ import (
 		config        config                      
 		infoLog       *log.Logger                  
 		errorLog      *log.Logger                 
-		templateCache map[string]*template.Template 
 		version       string                        
 	}
 
@@ -70,6 +68,7 @@ func main(){
 		config: cfg,
 		infoLog:infoLog ,
 		errorLog: errorLog,
+		version: version,
 
 	}
    err := app.serve()
