@@ -21,7 +21,7 @@ type config struct { // configuration အတွက် struct ဖွဲ့ထာ�
 		dsn string // database connection string
 	}
 	stripe struct { // Stripe payment configuration
-		secrect string // Stripe secret key
+		secret string // Stripe secret key
 		key     string // Stripe public key
 	}
 }
@@ -55,12 +55,13 @@ func main() { // main function
 	flag.IntVar(&cfg.port, "port", 4000, "Server port to listen on")
 	flag.StringVar(&cfg.env, "env", "development", "Application environment {development | production}")
 	flag.StringVar(&cfg.api, "api", "http://localhost:4001", "URL to api")
+	 flag.StringVar(&cfg.db.dsn, "dsn", "", "Database connection string")
 
 	flag.Parse() // flags တွေကို ခေါ်သုံးထားတာ။
 
 	// Stripe keys တွေကို environment variables ကနေ ယူထားတာပါ
 	cfg.stripe.key = os.Getenv("STRIPE_KEY")
-	cfg.stripe.secrect = os.Getenv("STRIPE_SECRECT")
+	cfg.stripe.secret = os.Getenv("STRIPE_SECRECT")
 
 	// loggers တွေကို create လုပ်ထားတာပါ
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)

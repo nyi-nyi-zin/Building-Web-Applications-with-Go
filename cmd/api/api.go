@@ -16,12 +16,11 @@ import (
 	type config struct { 
 		port int
 		env  string
-	
 		db   struct { 
 			dsn string 
 		}
 		stripe struct { 
-			secrect string 
+			secret string 
 			key     string 
 		}
 	}
@@ -42,7 +41,7 @@ import (
 		ReadHeaderTimeout: 5 * time.Second,                     
 		WriteTimeout:      5 * time.Second,                  
 	}
-	app.infoLog.Printf(fmt.Sprintf("Starting Backend server in %s mode on port %d", app.config.env, app.config.port))
+	app.infoLog.Println(fmt.Sprintf("Starting Back end server in %s mode on port %d", app.config.env, app.config.port))
 
 	return srv.ListenAndServe() 
 }
@@ -52,14 +51,15 @@ func main(){
 
 	var cfg config 
 
-	flag.IntVar(&cfg.port, "port", 4001, "Server port to listen on")
+	flag.IntVar(&cfg.port, "port", 4444, "Server port to listen on")
 	flag.StringVar(&cfg.env, "env", "development", "Application environment {development | production | maintenance}")
+	
 	
 
 	flag.Parse() 
 
 	cfg.stripe.key = os.Getenv("STRIPE_KEY")
-	cfg.stripe.secrect = os.Getenv("STRIPE_SECRECT")
+	cfg.stripe.secret = os.Getenv("STRIPE_SECRECT")
 
 	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
 	errorLog := log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
