@@ -28,7 +28,7 @@
 
     <div class="mb-3">
         <label for="cardholder-email" class="form-label">Cardholder Email</label>
-        <input type="email" class="form-control" id="cardholder-email" name="cardholder_email"
+        <input type="email" class="form-control" id="cardholder-email" name="email"
             required="" autocomplete="cardholder-email-new">
     </div>
 
@@ -95,11 +95,11 @@
         cardMessages.innerText = "Transaction successful";
     }
     
-     function val(event) {
+     function val() {
         let form = document.getElementById("charge_form");
         if (form.checkValidity() === false) {
-           event.preventDefault();
-           event.stopPropagation();
+           this.event.preventDefault();
+           this.event.stopPropagation();
             form.classList.add("was-validated");
             return;
         }
@@ -150,7 +150,7 @@
                                 document.getElementById("payment_currency").value = result.paymentIntent.currency;
                                 processing.classList.add("d-none");
                                 showCardSuccess();
-                                // would submit the form
+                                document.getElementById("charge_form").submit();
                             }
                         }
                     })

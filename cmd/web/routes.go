@@ -1,14 +1,16 @@
-package main // main package ဖြစ်ကြောင်း ကြေငြာထားတာပါ
+package main
 
 import (
-	"net/http" // HTTP server အတွက်
+	"net/http"
 
-	"github.com/go-chi/chi/v5" // Chi router အတွက်
-) 
+	"github.com/go-chi/chi/v5"
+)
 
-func (app *application) routes() http.Handler { // routes တွေကို handle လုပ်တဲ့ function
-	mux := chi.NewRouter() // Chi router ကို create လုပ်ထားတာပါ
+func (app *application) routes() http.Handler {
+	mux := chi.NewRouter()
 
 	mux.Get("/virtual-terminal", app.VirtualTerminal)
-	return mux  // router ကို return လုပ်ပါ
+	mux.Post("/payment-succeeded", app.PaymentSucceeded)
+
+	return mux
 }
