@@ -123,12 +123,11 @@
         }
 
         fetch("http://localhost:4001/api/payment-intent", requestOptions)
-            .then(response => response.text())
-            .then(response => {
+            .then(response =>  response.text())
+            .then(response => {           
                 let data;
-                try {
-                    data = JSON.parse(response);
-                    console.log(data)
+                try {                    
+                    data = JSON.parse(response);    
                     stripe.confirmCardPayment(data.client_secret, {
                         payment_method: {
                             card: card,
