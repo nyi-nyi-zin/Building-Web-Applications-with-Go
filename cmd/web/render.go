@@ -9,26 +9,38 @@ import (
 )
 
 type templateData struct {
-	StringMap       map[string]string
-	IntMap          map[string]int
-	FloatMap        map[string]float32
-	Data            map[string]interface{}
-	CSRFToken       string
-	Flash           string
-	Warning         string
-	Error           string
-	IsAuthenticated int
-	API             string
-	CSSVersion      string
+	StringMap            map[string]string
+	IntMap               map[string]int
+	FloatMap             map[string]float32
+	Data                 map[string]interface{}
+	CSRFToken            string
+	Flash                string
+	Warning              string
+	Error                string
+	IsAuthenticated      int
+	API                  string
+	CSSVersion           string
+	StripeSecretkey      string
+	StripePublishableKey string
 }
 
-var functions = template.FuncMap{}
+var functions = template.FuncMap{
+	"formatCurrency": formatCurrency,
+}
+
+func formatCurrency(n int) string {
+	f := float32(n / 100)
+	println(f)
+	return fmt.Sprintf("$%.2f", f)
+}
 
 //go:embed templates
 var templateFS embed.FS
 
 func (app *application) addDefaultData(td *templateData, r *http.Request) *templateData {
 	td.API = app.config.api
+	td.StripePublishableKey = app.config.stripe.secret
+	td.StripePublishableKey = app.config.stripe.key
 	return td
 }
 
@@ -65,7 +77,7 @@ func (app *application) renderTemplate(w http.ResponseWriter, r *http.Request, p
 	return nil
 }
 
-//Done Noted!1
+// Done Noted!1
 // template file တွေကို parse လုပ်တာ
 func (app *application) parseTemplate(partials []string, page, templateToRender string) (*template.Template, error) {
 	var t *template.Template
