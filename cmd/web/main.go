@@ -6,33 +6,35 @@ import ( // လိုအပ်တဲ့ package တွေကို import လု
 	"html/template"
 	"log"
 	"myapp/internal/driver"
+	"myapp/internal/models"
 	"net/http"
 	"os"
 	"time"
 )
 
-const version = "1.0.0" 
-const cssVersion = "1"  
+const version = "1.0.0"
+const cssVersion = "1"
 
 type config struct { // configuration အတွက် struct ဖွဲ့ထားတာပါ
-	port int     
-	env  string   
-	api  string   
+	port int
+	env  string
+	api  string
 	db   struct { // database configuration
 		dsn string // database connection string
 	}
 	stripe struct { // Stripe payment configuration
 		secret string // Stripe secret key
-		key     string // Stripe public key
+		key    string // Stripe public key
 	}
 }
 
 type application struct { // main application struct
-	config        config                        // configuration
-	infoLog       *log.Logger                   // information logger
-	errorLog      *log.Logger                   // error logger
-	templateCache map[string]*template.Template // HTML templates cache
-	version       string                        // application version
+	config        config
+	infoLog       *log.Logger
+	errorLog      *log.Logger
+	templateCache map[string]*template.Template
+	version       string
+	DB            models.DBModel
 }
 
 func (app *application) serve() error { // HTTP server ကို start လုပ်တဲ့ function
@@ -56,7 +58,7 @@ func main() { // main function
 	flag.IntVar(&cfg.port, "port", 4000, "Server port to listen on")
 	flag.StringVar(&cfg.env, "env", "development", "Application environment {development | production}")
 	flag.StringVar(&cfg.api, "api", "http://localhost:4001", "URL to api")
-	 flag.StringVar(&cfg.db.dsn, "dsn", "nyinyizin:secret@tcp(localhost:3306)/widgets?parseTime=true&tls=false", "DSN")
+	flag.StringVar(&cfg.db.dsn, "dsn", "nyinyizin:secret@tcp(localhost:3306)/widgets?parseTime=true&tls=false", "DSN")
 
 	flag.Parse() // flags တွေကို ခေါ်သုံးထားတာ။
 
@@ -72,7 +74,7 @@ func main() { // main function
 	if err != nil {
 		errorLog.Fatal(err)
 	}
-	defer conn.Close();
+	defer conn.Close()
 
 	tc := make(map[string]*template.Template) // template cache ကို create လုပ်ထားတာပါ
 
@@ -83,9 +85,9 @@ func main() { // main function
 		errorLog:      errorLog,
 		templateCache: tc,
 		version:       version,
+		DB:            models.DBModel{DB: conn},
 	}
 
-	// server ကို start လုပ်တဲ့ function ကိုခေါ်သုံးထားတာ။
 	err = app.serve()
 	if err != nil {
 		app.errorLog.Println(err)

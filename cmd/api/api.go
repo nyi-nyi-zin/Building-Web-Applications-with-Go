@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"myapp/internal/driver"
+	"myapp/internal/models"
 	"net/http"
 	"os"
 	"time"
@@ -29,6 +30,7 @@ type application struct {
 	infoLog  *log.Logger
 	errorLog *log.Logger
 	version  string
+	DB       models.DBModel
 }
 
 func (app *application) serve() error {
@@ -67,13 +69,14 @@ func main() {
 	if err != nil {
 		errorLog.Fatal(err)
 	}
-	defer conn.Close();
+	defer conn.Close()
 
 	app := &application{
 		config:   cfg,
 		infoLog:  infoLog,
 		errorLog: errorLog,
 		version:  version,
+		DB:       models.DBModel{DB: conn},
 	}
 	err = app.serve()
 	if err != nil {
